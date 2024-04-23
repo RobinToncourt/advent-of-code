@@ -16,7 +16,9 @@ pub mod utils {
     pub fn inputs_to_presents(inputs: Vec<String>) -> Vec<Present> {
         let mut presents: Vec<Present> = Vec::new();
         
-        inputs.iter().for_each(|input| presents.push(string_to_present(input.as_str())));
+        inputs.iter().for_each(
+			|input| presents.push(string_to_present(input.as_str()))
+		);
         
         presents
     }
@@ -38,11 +40,16 @@ impl Present {
     }
     
     pub const fn calculate_surface_area(&self) -> u32 {
-        2*self.length*self.width + 2*self.width*self.height + 2*self.height*self.length
+        2*self.length*self.width +
+		2*self.width*self.height +
+		2*self.height*self.length
     }
     
     pub fn get_smallest_side_area(&self) -> u32 {
-        let surfaces_area: Vec<u32> = vec![self.length*self.width, self.width*self.height, self.height*self.length];
+        let surfaces_area: Vec<u32> =
+			vec![self.length*self.width,
+				self.width*self.height,
+				self.height*self.length];
         *surfaces_area.iter().min().unwrap()
     }
     
@@ -69,7 +76,9 @@ impl Present {
 pub fn wrapping_paper_order(presents: Vec<Present>) -> u32 {
     let mut wrapping_paper_total: u32 = 0;
     
-    presents.iter().for_each(|present| wrapping_paper_total += present.get_wrapping_paper_needed());
+    presents.iter().for_each(
+		|present| wrapping_paper_total += present.get_wrapping_paper_needed()
+	);
     
     wrapping_paper_total
 }
@@ -77,7 +86,9 @@ pub fn wrapping_paper_order(presents: Vec<Present>) -> u32 {
 pub fn ribbon_order(presents: Vec<Present>) -> u32 {
     let mut ribbon_total: u32 = 0;
     
-    presents.iter().for_each(|present| ribbon_total += present.get_ribbon_needed());
+    presents.iter().for_each(
+		|present| ribbon_total += present.get_ribbon_needed()
+	);
     
     ribbon_total
 }
