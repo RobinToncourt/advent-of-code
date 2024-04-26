@@ -36,6 +36,9 @@ mod tests {
 	fn test_position_enter_basement_puzzle_inputs() {
 		let inputs: Vec<String> =
 			load_from_file("./src/year_2015/day_1/inputs.txt");
-		assert_eq!(position_enter_basement(inputs.get(0).unwrap().as_str()), 1797);
+		assert_eq!(
+			position_enter_basement(inputs.get(0).unwrap().as_str()),
+			1797
+		);
 	}
 }

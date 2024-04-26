@@ -16,7 +16,7 @@ pub fn which_floor(directions: &str) -> i32 {
 
 pub fn position_enter_basement(directions: &str) -> usize {
     let mut floor: i32 = 0;
-    
+	
     for (i, c) in directions.chars().enumerate() {
         floor += match c {
             '(' => 1,
