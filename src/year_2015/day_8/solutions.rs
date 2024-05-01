@@ -2,8 +2,6 @@
 
 use regex::Regex;
 
-use crate::utils::utils::load_from_file;
-
 trait Diff {
 	fn get_string_size_diff(&self) -> usize;
 }
