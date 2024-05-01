@@ -29,7 +29,7 @@ pub fn contains_forbidden_string(string: &str) -> bool {
 	for fbdn_str in FORBIDDEN_STRINGS {
 		if string.contains(fbdn_str) {
 			return true;
-	   }
+		}
 	}
 
 	false
@@ -85,7 +85,7 @@ pub fn contains_pair_without_overlapping(string: &str) -> bool {
 		if value >= 2 {
 			return true;
 		}
-	}  
+	}
 
 	false
 }
