@@ -1,2 +1,6 @@
 /target
 Cargo.lock
+inputs.txt
+instructions.txt
+example.txt
+examples.txt
