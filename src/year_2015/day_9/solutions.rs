@@ -81,27 +81,27 @@ impl LocationPair {
 
 fn get_combinations<T>(list: Vec<T>) -> Vec<Vec<T>>
 where
-    T: Clone
+	T: Clone
 {
-    let mut result: Vec<Vec<T>> = Vec::new();
-    
-    if list.len() == 1 {
-        result.push(list);
-    }
-    else {
-        for index in 0..list.len() {
-            let mut list_copy = list.clone();
-            let actual = list_copy.remove(index);
-            
-            for sub_vec in get_combinations(list_copy) {
-                let mut tmp = sub_vec.clone();
-                tmp.insert(0, actual.clone());
-                result.push(tmp);
-            }
-        }
-    }
-    
-    result
+	let mut result: Vec<Vec<T>> = Vec::new();
+	
+	if list.len() == 1 {
+		result.push(list);
+	}
+	else {
+		for index in 0..list.len() {
+			let mut list_copy = list.clone();
+			let actual = list_copy.remove(index);
+			
+			for sub_vec in get_combinations(list_copy) {
+				let mut tmp = sub_vec.clone();
+				tmp.insert(0, actual.clone());
+				result.push(tmp);
+			}
+		}
+	}
+	
+	result
 }
 
 fn create_location_pair_list(inputs: &Vec<String>) ->Vec<LocationPair> {
@@ -156,13 +156,13 @@ pub fn get_shortest_route(inputs: &Vec<String>) -> (Vec<String>, usize) {
 		(Vec::<String>::new(), std::usize::MAX);
 	let combinations: Vec<Vec<String>> = get_combinations(cities);
 	
-    for comb in &combinations {
+	for comb in &combinations {
 		let route_length: usize = matrice.get_route_length(comb);
 		
 		if route_length < shortest_route.1 {
 			shortest_route = (comb.clone(), route_length);
 		}
-    }
+	}
 	
 	shortest_route
 }
@@ -177,13 +177,13 @@ pub fn get_longest_route(inputs: &Vec<String>) -> (Vec<String>, usize) {
 		(Vec::<String>::new(), 0);
 	let combinations: Vec<Vec<String>> = get_combinations(cities);
 	
-    for comb in &combinations {
+	for comb in &combinations {
 		let route_length: usize = matrice.get_route_length(comb);
 		
 		if route_length > longest_route.1 {
 			longest_route = (comb.clone(), route_length);
 		}
-    }
+	}
 	
 	longest_route
 }
