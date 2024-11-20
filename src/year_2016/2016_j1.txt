@@ -1,0 +1,114 @@
+#![allow(dead_code)]
+
+enum Direction {
+    North,
+    Est,
+    South,
+    West,
+}
+
+impl Direction {
+    fn change_direction(&self, left_right: char) -> Direction {
+        match left_right {
+            'L' => {
+                match &self {
+                    Direction::North => Direction::West,
+                    Direction::Est => Direction::North,
+                    Direction::South => Direction::Est,
+                    Direction::West => Direction::South,
+                }
+            },
+            'R' => {
+                match &self {
+                    Direction::North => Direction::Est,
+                    Direction::Est => Direction::South,
+                    Direction::South => Direction::West,
+                    Direction::West => Direction::North,
+                }
+            },
+            _ => panic!("Not left or right"),
+        }
+    }
+}
+
+struct Pos {
+    x: isize,
+    y: isize,
+    direction: Direction,
+    previous_locations: Vec<(isize, isize)>,
+}
+
+impl Pos {
+    fn new() -> Self {
+        Self {
+            x: 0,
+            y: 0,
+            direction: Direction::North,
+            previous_locations: vec![(0, 0)],
+        }
+    }
+    
+    fn change_pos(&mut self, left_right: char, nb_blocs: isize) {
+        self.direction = self.direction.change_direction(left_right);
+        
+        match self.direction {
+            Direction::North => self.y += nb_blocs,
+            Direction::Est => self.x += nb_blocs,
+            Direction::South =>  self.y -= nb_blocs,
+            Direction::West => self.x -= nb_blocs,
+        }
+    }
+    
+    fn get_distance_from_start(&self) -> usize {
+        self.x.abs() as usize + self.y.abs() as usize
+    }
+}
+
+fn indications_to_distance(indications: &str) -> usize {
+    let mut position = Pos::new();
+    
+    for indi in indications.split(", ") {
+        let left_right: char = indi.chars().nth(0).unwrap();
+        let nb_block: isize =
+            String::from_utf8(
+                indi.as_bytes().to_vec()[1..].to_vec()
+            ).unwrap().parse::<isize>().unwrap();
+        
+        position.change_pos(left_right, nb_block);
+    }
+    
+    position.get_distance_from_start()
+}
+
+fn main() {
+    println!("Advent of code");
+    println!("Year 2016, day 01");
+}
+
+const EXAMPLE_1: &str = "R2, L3";
+const EXAMPLE_2: &str = "R2, R2, R2";
+const EXAMPLE_3: &str = "R5, L5, R5, R3";
+const INPUT: &str = "R4, R4, L1, R3, L5, R2, R5, R1, L4, R3, L5, R2, L3, L4, L3, R1, R5, R1, L3, L1, R3, L1, R2, R2, L2, R5, L3, L4, R4, R4, R2, L4, L1, R5, L1, L4, R4, L1, R1, L2, R5, L2, L3, R2, R1, L194, R2, L4, R49, R1, R3, L5, L4, L1, R4, R2, R1, L5, R3, L5, L4, R4, R4, L2, L3, R78, L5, R4, R191, R4, R3, R1, L2, R1, R3, L1, R3, R4, R2, L2, R1, R4, L5, R2, L2, L4, L2, R1, R2, L3, R5, R2, L3, L3, R3, L1, L1, R5, L4, L4, L2, R5, R1, R4, L3, L5, L4, R5, L4, R5, R4, L3, L2, L5, R4, R3, L3, R1, L5, R5, R1, L3, R2, L5, R5, L3, R1, R4, L5, R4, R2, R3, L4, L5, R3, R4, L5, L5, R4, L4, L4, R1, R5, R3, L1, L4, L3, L4, R1, L5, L1, R2, R2, R4, R4, L5, R4, R1, L1, L1, L3, L5, L2, R4, L3, L5, L4, L1, R3";
+
+#[cfg(test)]
+mod test {
+    use crate::{
+        
+    };
+    
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

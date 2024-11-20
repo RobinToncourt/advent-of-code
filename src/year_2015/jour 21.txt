@@ -1,0 +1,146 @@
+#![allow(dead_code, unused_imports, unused_variables, unused_mut)]
+
+const PLAYER_HIT_POINTS: u8 = 100;
+
+struct Item {
+    name: String,
+    cost: u8,
+    damage: u8,
+    armor: u8,
+}
+
+struct Weapon(Item);
+struct Armor(Item);
+struct Ring(Item);
+
+struct Shop {
+    weapons: Vec<Weapon>,
+    armors: Vec<Armor>,
+    rings: Vec<Ring>,
+}
+
+struct Player {
+    hit_points: u8,
+    weapon: Weapon,
+    armor: Option<Armor>,
+    left_ring: Option<Ring>,
+    right_ring: Option<Ring>,
+}
+
+impl Player {
+    fn get_damage(&self) -> u8 {
+        let mut damage: u8 = 0;
+        
+        damage += self.weapon.0.damage;
+        if let Some(left_ring) = &self.left_ring {
+            damage += left_ring.0.damage;
+        }
+        if let Some(right_ring) = &self.right_ring {
+            damage += right_ring.0.damage;
+        }
+        
+        damage
+    }
+    
+    fn get_armor(&self) -> u8 {
+        let mut def: u8 = 0;
+        
+        if let Some(armor) = &self.armor {
+            def += armor.0.armor;
+        }
+        if let Some(left_ring) = &self.left_ring {
+            def += left_ring.0.armor;
+        }
+        if let Some(right_ring) = &self.right_ring {
+            def += right_ring.0.armor;
+        }
+        
+        def
+    }
+    
+    fn to_entity(&self) -> Entity {
+        Entity {
+            hit_points: self.hit_points,
+            damage: self.get_damage(),
+            armor: self.get_armor(),
+        }
+    }
+}
+
+#[derive(Debug)]
+struct Entity {
+    hit_points: u8,
+    damage: u8,
+    armor: u8,
+}
+
+impl Entity {
+    fn new(hit_points: u8, damage: u8, armor: u8) -> Self {
+        Self {
+            hit_points,
+            damage,
+            armor,
+        }
+    }
+}
+
+fn parse_boss_input(input: &str) -> Entity {
+    let mut hit_points: u8 = 0;
+    let mut damage: u8 = 0;
+    let mut armor: u8 = 0;
+    
+    let lines: Vec<&str> = input.lines().collect::<Vec<&str>>();
+    for line_nb in 0..3 {
+        let value: u8 = lines[line_nb].split(": ").collect::<Vec<&str>>()[1].parse::<u8>().unwrap();
+        
+        match line_nb {
+            0 => hit_points = value,
+            1 => damage = value,
+            2 => armor = value,
+            _ => unreachable!(),
+        }
+    }
+    
+    Entity {
+        hit_points,
+        damage,
+        armor,
+    }
+}
+
+fn calculate_damage(attacker: &Entity, defenser: &Entity) -> u8 {
+    if attacker.damage <= defenser.armor {
+        return 1;
+    }
+    
+    attacker.damage - defenser.armor
+}
+
+struct TurnBasedCombat {
+    player: Entity,
+    boss: Entity,
+}
+
+impl TurnBasedCombat {
+    fn next_turn(&mut self) {
+        self.boss.hit_points -= calculate_damage(&self.player, &self.boss);
+        if self.boss.hit_points > 0 {
+            self.player.hit_points -= calculate_damage(&self.boss, &self.player);
+        }
+    }
+    
+    fn is_combat_over(&self) -> bool {
+        self.player.hit_points <= 0 || self.boss.hit_points <= 0
+    }
+}
+
+fn main() {
+    println!("Hello, world!");
+    
+    let boss: Entity = parse_boss_input(BOSS_STATS);
+    println!("{boss:?}");
+}
+
+const BOSS_STATS: &str = "Hit Points: 104
+Damage: 8
+Armor: 1";

@@ -1,0 +1,51 @@
+#![allow(unused_mut, unused_variables, dead_code)]
+
+const PRESENTS: usize = 29_000_000;
+
+fn get_visiting_elf_number_list(value: usize) -> Vec<usize> {
+    let mut visiting_number_list: Vec<usize> = Vec::new();
+    
+    for i in 1..=value {
+        if value % i == 0 {
+            visiting_number_list.push(i);
+        }
+    }
+    
+    visiting_number_list
+}
+
+// Numéro de l'elf * 10 + 10 (premier elf).
+fn calculate_presents_nb(elfs: &Vec<usize>) -> usize {
+    let mut sum: usize = 0;
+    
+    for val in elfs {
+        sum += val * 10;
+    }
+    
+    sum
+}
+
+fn get_lowest_house_number() -> usize {
+    let mut house_nb: usize = 1;
+    
+    loop {
+        let elf_number_list: Vec<usize> = get_visiting_elf_number_list(house_nb);
+        
+        //println!("{house_nb} => {elf_number_list:?} = {}", calculate_presents_nb(&elf_number_list));
+        //println!("{}", calculate_presents_nb(&elf_number_list));
+        
+        if calculate_presents_nb(&elf_number_list) >= PRESENTS {
+            break;
+        }
+        
+        house_nb += 1;
+    }
+    
+    house_nb
+}
+
+fn main() {
+    println!("Hello, world!");
+    
+    println!("{:?}", get_lowest_house_number());
+}

@@ -1,0 +1,125 @@
+#![allow(unused_mut, unused_variables, dead_code)]
+
+use regex::Regex;
+
+const REPLACEMENT_REGEX_STR: &str = r"(?<from>\w+) => (?<to>\w+)";
+
+#[derive(Debug)]
+struct Replacement {
+    from: String,
+    to: String,
+}
+
+impl Replacement {
+    fn parse(input: &str) -> Self {
+        let regex = Regex::new(REPLACEMENT_REGEX_STR).unwrap();
+        let capture = regex.captures(input).unwrap();
+        
+        let from: String = capture["from"].to_string();
+        let to: String = capture["to"].to_string();
+        
+        Self {
+            from,
+            to,
+        }
+    }
+}
+
+fn input_to_replacement_list_and_medicine(input: &str) -> (String, Vec<Replacement>) {
+    let mut replacement_list: Vec<Replacement> = Vec::new();
+    
+    let mut iter_lines = input.lines().collect::<Vec<&str>>().into_iter();
+    
+    while let Some(line) = iter_lines.next() {
+        if line != "" {
+            replacement_list.push(Replacement::parse(line));
+        }
+        else {
+            break;
+        }
+    }
+    
+    let medicine_molecule: String = iter_lines.next().unwrap().to_string();
+    
+    (medicine_molecule, replacement_list)
+}
+
+fn calibrate(medicine_molecule: &str, replacement_list: &Vec<Replacement>) -> Vec<String> {
+    let mut calibration: Vec<String> = Vec::new();
+    
+    for replacement in replacement_list {
+        println!("{:?}", medicine_molecule.match_indices(&replacement.from).collect::<Vec<(usize, &str)>>());
+    }
+    
+    calibration
+}
+
+fn main() {
+    println!("Hello, world!");
+    
+    let (medicine_molecule, replacement_list) = input_to_replacement_list_and_medicine(EXAMPLE);
+    println!("{replacement_list:?}");
+    println!("{medicine_molecule}");
+    
+    calibrate(&medicine_molecule, &replacement_list);
+    
+    println!("{}", "abcdefa".replace("a", "?"));
+}
+
+const EXAMPLE: &str = "H => HO
+H => OH
+O => HH
+
+HOH";
+
+const EXAMPLE_2: &str = "H => HO
+H => OH
+O => HH
+
+HOHOHO";
+
+const INPUT: &str = "Al => ThF
+Al => ThRnFAr
+B => BCa
+B => TiB
+B => TiRnFAr
+Ca => CaCa
+Ca => PB
+Ca => PRnFAr
+Ca => SiRnFYFAr
+Ca => SiRnMgAr
+Ca => SiTh
+F => CaF
+F => PMg
+F => SiAl
+H => CRnAlAr
+H => CRnFYFYFAr
+H => CRnFYMgAr
+H => CRnMgYFAr
+H => HCa
+H => NRnFYFAr
+H => NRnMgAr
+H => NTh
+H => OB
+H => ORnFAr
+Mg => BF
+Mg => TiMg
+N => CRnFAr
+N => HSi
+O => CRnFYFAr
+O => CRnMgAr
+O => HP
+O => NRnFAr
+O => OTi
+P => CaP
+P => PTi
+P => SiRnFAr
+Si => CaSi
+Th => ThCa
+Ti => BP
+Ti => TiTi
+e => HF
+e => NAl
+e => OMg
+
+CRnCaSiRnBSiRnFArTiBPTiTiBFArPBCaSiThSiRnTiBPBPMgArCaSiRnTiMgArCaSiThCaSiRnFArRnSiRnFArTiTiBFArCaCaSiRnSiThCaCaSiRnMgArFYSiRnFYCaFArSiThCaSiThPBPTiMgArCaPRnSiAlArPBCaCaSiRnFYSiThCaRnFArArCaCaSiRnPBSiRnFArMgYCaCaCaCaSiThCaCaSiAlArCaCaSiRnPBSiAlArBCaCaCaCaSiThCaPBSiThPBPBCaSiRnFYFArSiThCaSiRnFArBCaCaSiRnFYFArSiThCaPBSiThCaSiRnPMgArRnFArPTiBCaPRnFArCaCaCaCaSiRnCaCaSiRnFYFArFArBCaSiThFArThSiThSiRnTiRnPMgArFArCaSiThCaPBCaSiRnBFArCaCaPRnCaCaPMgArSiRnFYFArCaSiThRnPBPMgAr";

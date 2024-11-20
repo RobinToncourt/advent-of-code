@@ -1,0 +1,18 @@
+Petgraph :
+	Graphs in Rust: An Introduction to Petgraph | Depth-First
+
+Tyoed-arena :
+	typed-arena - crates.io: Rust Package Registry
+
+Graph like data structure :
+	Implement graph-like data structure in Rust - Stack Overflow
+
+Note sur les graphs en Rust :
+	r4cppp/graphs/README.md at master · nrc/r4cppp · GitHub
+	Modeling graphs in Rust using vector indices · baby steps (smallcultfollowing.com)
+
+Arena allocation :
+
+Region-based memory management - Wikipedia
+
+c++ - What is the meaning of the term arena in relation to memory? - Stack Overflow

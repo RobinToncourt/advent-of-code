@@ -1,0 +1,118 @@
+#![allow(unused_mut, unused_variables, dead_code)]
+use core::iter::Sum;
+
+#[derive(Debug)]
+struct Container(u8);
+
+fn input_to_list_container(input: &str) -> Vec<Container> {
+    input.lines()
+        .map(
+            |line| Container(line.parse::<u8>().unwrap())
+        )
+        .collect::<Vec<Container>>()
+}
+
+struct Cursor<'a, T> {
+    list: &'a Vec<T>,
+    cursor: usize,
+}
+
+impl<'a, T> Cursor<'a, T> {
+    fn new(list: &'a Vec<T>) -> Self {
+        Self {
+            list,
+            cursor: 0,
+        }
+    }
+    
+    fn begin(&mut self) {
+        self.cursor = 0;
+    }
+    
+    fn next(&mut self) -> Option<&T> {
+        let result: Option<&T> = self.list.get(self.cursor);
+        
+        if result.is_some() {
+            self.cursor += 1;
+        }
+        
+        result
+    }
+    
+    fn get_nb_remaining(&self) -> usize {
+        self.list.len() - self.cursor
+    }
+    
+    fn get_remaining(&self) -> &'a [T] {
+        &self.list[self.cursor..]
+    }
+}
+
+impl<'a, T> Cursor<'a, T>
+where
+    usize: Sum<&'a T>
+{
+    fn get_remaining_sum(&self) -> usize {
+        self.list[self.cursor..].iter().sum()
+    }
+}
+
+fn is_same_ref<T>(ref_1: &T, ref_2: &T) -> bool {
+    ref_1 as *const _ == ref_2 as *const _
+}
+
+struct Permutation<'a, T> {
+    list: &'a Vec<T>,
+}
+
+impl<'a, T> Permutation<'a, T> {
+    fn new(list: &'a Vec<T>) -> Self {
+        Self {
+            list,
+        }
+    }
+    
+    fn next(&mut self) -> Option<Vec<&T>> {
+        None
+    }
+}
+
+fn main() {
+    println!("Hello, world!");
+    
+    let containers: Vec<Container> = input_to_list_container(EXAMPLE);
+    let mut curseur = Cursor::new(&containers);
+    while let Some(container) = curseur.next() {
+        let mut inner_curseur = Cursor::new(&containers);
+        while let Some(inner_container) = inner_curseur.next() {
+            println!("{container:?} == {inner_container:?}: {}", is_same_ref(container, inner_container));
+        }
+    }
+}
+
+const EXAMPLE: &str = "20
+15
+10
+5
+5";
+
+const INPUT: &str = "11
+30
+47
+31
+32
+36
+3
+1
+5
+3
+32
+36
+15
+11
+46
+26
+28
+1
+19
+3";

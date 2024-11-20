@@ -1,0 +1,87 @@
+#![allow(dead_code)]
+
+use std::cmp;
+
+const WIDTH: usize = 50;
+const HEIGHT: usize = 6;
+
+struct Screen<const X: usize, const Y: usize> {
+    width: usize,
+    height: usize,
+    pixels: [[bool; Y]; X],
+}
+
+fn rotate_vec<T>(vec: Vec<T>, shift: usize) -> Vec<T>
+where
+    T: Clone,
+{
+    let len = vec.len();
+    let mut result: Vec<Option<T>> = vec![None; len];
+    
+    for (index, val) in vec.into_iter().enumerate() {
+        result[(index + shift) % len] = Some(val);
+    }
+    
+    result.into_iter().map(|e| e.unwrap()).collect::<Vec<T>>()
+}
+
+impl<const X: usize, const Y: usize> Screen<X, Y> {
+    fn new() -> Self {
+        Self {
+            width: X,
+            height: Y,
+            pixels: [[false; Y]; X],
+        }
+    }
+    
+    fn rect(&mut self, width: usize, height: usize) {
+        let width = cmp::min(self.width, width);
+        let height = cmp::min(self.height, height);
+        
+        for x in 0..width {
+            for y in 0..height {
+                self.pixels[x][y] = true;
+            }
+        }
+    }
+    
+    fn rotate_row(&mut self, _row: usize, _shift: isize) {
+        
+    }
+    
+    fn rotate_column(&mut self, column: usize, _shift: isize) {
+        let column = self.pixels[column].clone();
+        
+    }
+    
+    fn print(&self) {
+        for y in 0..self.height {
+            for x in 0..self.width {
+                print!("{}", self.pixels[x][y].then(|| '#').unwrap_or('.'));
+            }
+            println!();
+        }
+    }
+}
+
+fn main() {
+    println!("Advent of code");
+    println!("Year 2016, day 08");
+    
+    /*let mut screen: Screen<7, 3> = Screen::new();
+    screen.rect(3, 2);
+    screen.print();*/
+    
+    let vec: Vec<usize> = vec![0, 1, 2, 3, 4];
+    println!("{vec:?}");
+    let vec = rotate_vec(vec, 1);
+    println!("{vec:?}");
+}
+
+#[cfg(test)]
+mod test {
+    use crate::{
+        
+    };
+
+}
